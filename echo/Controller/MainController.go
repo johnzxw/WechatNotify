@@ -67,7 +67,7 @@ type WechatUserInfoStruct struct {
 	Country       string `json:"country"`
 	Headimgurl    string `json:"headimgurl"`
 	SubscribeTime int64  `json:"subscribe_time"`
-	Unionid       string `json:"unionid"`
+	//Unionid       string `json:"unionid"`
 	Remark        string `json:"remark"`
 	Groupid       int    `json:"groupid"`
 	//TagidList     string `json:"tagid_list"`
@@ -105,7 +105,7 @@ func WechatAuth(c echo.Context) error {
 	openid := c.QueryParam("openid")
 	if openid != "" {
 		if validateWechatSign(c) {
-			saveWechatForOpenid(openid)
+			saveWechatForOpenid(openid, c)
 			xmlData := "<xml><ToUserName>< ![CDATA[toUser] ]></ToUserName><FromUserName>< ![CDATA[FromUser] ]></FromUserName><CreateTime>123456789</CreateTime><MsgType>< ![CDATA[event] ]></MsgType><Event>< ![CDATA[subscribe] ]></Event></xml>"
 			return c.XML(http.StatusOK, xmlData)
 		}
@@ -162,7 +162,7 @@ func GetWechatUser(c echo.Context) error {
 	Number := (total / count) + 1
 
 	arr, _ := Arr.Get("data").Get("openid").Array()
-	saveWechatUser(arr)
+	saveWechatUser(arr, c)
 	//多次拉取
 	if Number > 1 {
 		var i int64
@@ -175,7 +175,7 @@ func GetWechatUser(c echo.Context) error {
 				fmt.Println("json格式化失败")
 			}
 			arr, _ := Arr.Get("data").Get("openid").Array()
-			saveWechatUser(arr)
+			saveWechatUser(arr, c)
 		}
 	}
 	return c.HTML(http.StatusOK, "")
@@ -184,10 +184,10 @@ func GetWechatUser(c echo.Context) error {
 /**
  *批次保存用户信息
  */
-func saveWechatUser(data []interface{}) bool {
+func saveWechatUser(data []interface{}, c echo.Context) bool {
 	for _, openidTmp := range data {
 		openid := fmt.Sprintf("%s", openidTmp)
-		saveWechatForOpenid(openid)
+		saveWechatForOpenid(openid, c)
 	}
 	return true
 }
@@ -195,12 +195,13 @@ func saveWechatUser(data []interface{}) bool {
 /**
  *根据 openid 保存用户信息
  */
-func saveWechatForOpenid(openid string) bool {
+func saveWechatForOpenid(openid string, c echo.Context) bool {
 	url := "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + getAccessToken(false) + "&openid=" + openid + "&lang=zh_CN"
 	WechatUser := Tool.Get(url)
+	c.Logger().Warn("get wechat user:" + openid + " info!" + WechatUser)
 	WechatUserStruct := &WechatUserInfoStruct{}
 	errs := json.Unmarshal([]byte(WechatUser), WechatUserStruct)
-	if errs == nil && WechatUserStruct.Unionid != "" {
+	if errs == nil && WechatUserStruct.SubscribeTime != 0 {
 		saveResult := SaveWechatUserInfoData(*WechatUserStruct)
 		if saveResult == true {
 			return true
