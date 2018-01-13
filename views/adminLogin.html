@@ -1,0 +1,97 @@
+{{template "layoutTop"}}
+<div class="login-box">
+    <form class="layui-form layui-form-pane" method="post" action="" id="adminlogin-from">
+        <div class="layui-form-item">
+            <h3>xx后台登录系统</h3>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号：</label>
+
+            <div class="layui-input-inline">
+                <input type="text" name="account" class="layui-input" lay-verify="account" placeholder="账号"
+                       autocomplete="on" maxlength="20"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码：</label>
+
+            <div class="layui-input-inline">
+                <input type="password" name="password" class="layui-input" lay-verify="password" placeholder="密码"
+                       maxlength="20"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">验证码：</label>
+
+            <div class="layui-input-inline">
+                <input type="number" name="code" class="layui-input" lay-verify="code" placeholder="验证码"
+                       maxlength="4"/><img src="/api/common/getCaptcha" alt="" id="captcha">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <button type="reset" class="layui-btn layui-btn-danger btn-reset">重置</button>
+            <button type="button" class="layui-btn btn-submit" lay-submit="" lay-filter="sub">立即登录</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    layui.use(['form', 'layer'], function () {
+        // 操作对象
+        var form = layui.form
+                , layer = layui.layer
+                , $ = layui.jquery;
+        // 验证
+        form.verify({
+            account: function (value) {
+                if (value == "") {
+                    return "请输入用户名";
+                }
+            },
+            password: function (value) {
+                if (value == "") {
+                    return "请输入密码";
+                }
+            },
+            code: function (value) {
+                if (value == "") {
+                    return "请输入验证码";
+                }
+            }
+        });
+
+        $("#captcha").on("click", function () {
+            resetCpathc();
+        });
+
+        function resetCpathc() {
+            imgCodeUrl = "/api/common/getCaptcha";
+            var cs = imgCodeUrl + "?" + Math.random();
+            $("#captcha").attr("src", cs);
+        }
+
+        // 提交监听
+        form.on('submit(sub)', function (data) {
+            var form = new FormData(document.getElementById("adminlogin-from"));
+            $.ajax({
+                url: "/loginPost",
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.status == "200") {
+                        window.location.href = data.url;
+                    } else {
+                        resetCpathc();
+                        layer.alert(data.message);
+                    }
+                },
+                error: function (e) {
+                    layer.alert("请求出错！！请刷新重试");
+                }
+            });
+            return true;
+        });
+    })
+</script>
+{{template "layoutBottom"}}

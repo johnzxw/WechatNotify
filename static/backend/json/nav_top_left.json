@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "text": "用户组管理",
+      "icon": "&#xe621;",
+      "href": "https://wechatnotify.loading.pub/userGroup"
+    },
+    {
+      "text": "mongodb管理",
+      "icon": "&#xe621;",
+      "href": "https://mongoadmin.loading.pub"
+    },
+    {
+      "text": "memcache管理",
+      "icon": "&#xe621;",
+      "href": "https://memcache.loading.pub"
+    },
+    {
+      "text": "mysql管理",
+      "icon": "&#xe621;",
+      "href": "https://phpmyadmin.loading.pub"
+    },
+    {
+      "text": "supervisord管理",
+      "icon": "&#xe621;",
+      "href": "https://supervisord.loading.pub"
+    },
+    {
+      "text": "zabbix管理",
+      "icon": "&#xe621;",
+      "href": "https://zabbix.loading.pub"
+    },
+    {
+      "text": "django管理",
+      "icon": "&#xe621;",
+      "href": "https://django.loading.pub"
+    }
+  ]
+}

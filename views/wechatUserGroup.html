@@ -1,0 +1,88 @@
+{{template "layoutTop"}}
+<form class="layui-form" action="" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户组名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="groupName" lay-verify="groupName" autocomplete="off" placeholder="请输入"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<table class="layui-table" lay-even="" lay-skin="nob">
+    <colgroup>
+        <col width="150">
+        <col width="150">
+        <col width="200">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>名称</th>
+        <th>创建时间</th>
+        <th>创建人</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range $groupData := .data}}
+    <tr>
+        <td>{{$groupData.Id}}</td>
+        <td>{{$groupData.Name}}</td>
+        <td>{{$groupData.AddTime}}</td>
+        <td>{{$groupData.ForName}}</td>
+        <td><a href="/userGroupEdit?id={{$groupData.Id}}">编辑</a></td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
+
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+                , layer = layui.layer
+                , $ = layui.jquery;
+        //自定义验证规则
+        form.verify({
+            groupName: function (value) {
+                if (value.length < 2) {
+                    return '内容至少得2个字符啊';
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            $.ajax({
+                method: "POST",
+                url: "/userGroup",
+                async: false,
+                dataType: 'json',
+                cache: false,
+                data: data.field,
+                success: function (data) {
+                    if (data.status == "200") {
+                        layer.confirm('添加成功？', {
+                            btn: ['确定']
+                        }, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert(data.message);
+                    }
+                },
+                error: function (e) {
+                    layer.alert("网络出错");
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{{template "layoutBottom"}}

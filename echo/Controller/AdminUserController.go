@@ -1,19 +1,19 @@
 package Controller
 
 import (
-	"strconv"
-	"fmt"
-	"net/http"
-	"crypto/md5"
-	"github.com/labstack/echo"
 	"../Tool"
-	"encoding/json"
-	"github.com/garyburd/redigo/redis"
-	"github.com/bitly/go-simplejson"
-	"sort"
-	"strings"
+	"crypto/md5"
 	"crypto/sha1"
+	"encoding/json"
+	"fmt"
+	"github.com/bitly/go-simplejson"
+	"github.com/garyburd/redigo/redis"
+	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2"
+	"net/http"
+	"sort"
+	"strconv"
+	"strings"
 )
 
 var (
@@ -68,8 +68,8 @@ type WechatUserInfoStruct struct {
 	Headimgurl    string `json:"headimgurl"`
 	SubscribeTime int64  `json:"subscribe_time"`
 	//Unionid       string `json:"unionid"`
-	Remark        string `json:"remark"`
-	Groupid       int    `json:"groupid"`
+	Remark  string `json:"remark"`
+	Groupid int    `json:"groupid"`
 	//TagidList     string `json:"tagid_list"`
 }
 

@@ -104,11 +104,18 @@ func main() {
 	}))
 
 	//route
+	e.GET("/api/common/getCaptcha", Controller.Imgcaptcha)
 	e.GET("/", Controller.WechatAuth)
 	e.POST("/", Controller.WechatAuth)
+	e.GET("/userGroup", Controller.WechatUserGroup)
+	e.GET("/userGroupDelete", Controller.WechatUserGroup)
+	e.POST("/userGroup", Controller.WechatUserGroup)
+	e.GET("/login", Controller.AdminLogin)
+	e.POST("/loginPost", Controller.AdminLogin)
+	e.GET("/main", Controller.AdminMain)
 	e.GET("/getUser", Controller.GetWechatUser)
 	e.GET("/sendMessage", Controller.SendMessage)
-
+	e.GET("/userGroupEdit",Controller.UserGroupEdit)
 	Addr := ListenHosts + ":" + ListenPort
 	e.Logger.Fatal(e.Start(Addr))
 }

@@ -1,0 +1,49 @@
+{{template "layoutTop"}}
+<blockquote class="layui-elem-quote layui-text">
+    本页面可以对所有关注用户进行调换组。当前页面调换用户组之后，该用户之前对应的组，同步删除。以当前操作为准。
+</blockquote>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>修改组用户</legend>
+</fieldset>
+
+
+<form class="layui-form" action="">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开关-默认关</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="close" checked="checked" lay-skin="switch" lay-text="ON|OFF">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开关-默认开</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="open" checked="checked" lay-skin="switch" lay-text="ON|OFF">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script type="application/javascript">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form, layer = layui.layer;
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+            return false;
+        });
+
+
+    });
+</script>
+{{template "layoutBottom"}}

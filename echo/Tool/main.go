@@ -5,14 +5,41 @@ import (
 	"os"
 	"path/filepath"
 
-	"runtime"
-	"strings"
+	"fmt"
+	"github.com/fatih/structs"
 	"github.com/larspensjo/config"
+	"runtime"
+	"strconv"
+	"strings"
+	"time"
 )
 
 var currentPath = ""
 var configFactory = make(map[string]map[string]string)
 
+func GetTimeString() string {
+	return strconv.FormatInt(time.Now().Unix(), 10)
+}
+func GetTimeStamp() int64 {
+	return time.Now().Unix()
+}
+func Struct2Map(obj interface{}) map[string]string {
+	s := structs.New(obj)
+	returnData := map[string]string{}
+	for _, f := range s.Fields() {
+
+		if f.IsExported() {
+			returnData[f.Name()] = fmt.Sprintf("%+v", f.Value())
+		}
+	}
+	return returnData
+}
+func GetDateStringByStamp(stamp int64) string {
+	return time.Unix(stamp, 0).Format("2006-01-02 15:04:05")
+}
+func GetDateString() string {
+	return time.Unix(time.Now().Unix(), 0).Format("2006-01-02 15:04:05")
+}
 func GetCurrentDirectory() string {
 	if currentPath != "" {
 		return currentPath
